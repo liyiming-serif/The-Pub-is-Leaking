@@ -1,0 +1,74 @@
+#Table A Instructions
+addiu $1, $0, 0 #init and test addiu
+addiu $2, $0, 6
+addiu $3, $0, 5
+addiu $4, $0, 6
+addiu $5, $0, 5
+addiu $6, $0, 6
+addiu $7, $0, 5
+addiu $8, $0, 6
+addu $9, $1, $2 #test addu
+andi $4, $3, 5 #test andi
+ori $2, $1, 1 #test ori
+xori $5, $1, 0 #test xori
+slti $6, $7, -10 #test slti
+sltiu $8, $9, 10 #test sltiu
+sll $4, $3, 4 #test sll
+srl $4, $3, 2 #test srl
+sra $4, $3, 2 #test sra
+sllv $5, $7, $2 #test sllv
+srlv $1, $8, $3 #test srlv
+srav $2, $8, $3 #test srav
+movz $3, $5, $0 #test movz==0
+movz $11, $5, $4 #test movz!=0
+addiu $11, $0, -10 #test addiu
+movn $10, $5, $0 #test movn==0
+movn $6, $5, $4 #test movn!=0
+subu $1, $3, $4 #test subu
+and $1, $8, $9 #test and
+or $1, $0, $2 #test or
+xor $1, $0, $9 #test xor
+nor $1, $0, $10 #test nor
+slt $2, $11, $0 #test slt
+sltu $2, $11, $0 #test sltu
+lui $12, 5 #test lui
+
+#Table B Instructions; these should not change anything or cause data hazards
+j foo #test j
+jal bar #test jal
+jr $0 #test jr
+jalr $0 #test jalr
+#for branch testing: $4=1, $10=0, $11<0
+beq $4, $10, 8 #test beq if neq
+beq $4, $0, 8 #test beq if eq
+bne $4, $10, 8 #test bne if neq
+bne $4, $0, 8 #test bne if eq
+blez $10, 8 #test blez if true
+blez $4, 8 #test blez if false
+bgez $10, 8 #test bgez if true
+bgez $11, 8 #test bgez if false
+bltz $11, 8 #test bltz if true
+bltz $10, 8 #test bltz if false
+bgtz $4, 8 #test bgtz if true
+bgtz $10, 8 #test bgtz if false
+lw $4, 0($16) #test lw
+lb $4, 0($16) #test lb
+lbu $4, 5($16) #test lbu
+sw $4, 3($5) #test sw
+sb $4, 5($9) #test sb
+foo: #j target
+bar: #jal target
+pop: #branching target
+
+#forwarding
+addiu $1, $0, 1 #init values
+addiu $5, $0, 9
+addiu $6, $0, 12
+addiu $7, $0, 15
+addu $2, $7, $0 #ex/mem->ex hazard on $7
+addu $3, $7, $1 #mem/wb->ex hazard on $7
+addu $4, $7, $0 #reg bypass hazard on $7
+addiu $4, $5, 1
+addu $2, $4, $0 #simultaneous data hazard on $4
+addiu $0, $1, 0
+addiu $3, $0, 0 #false data hazard
