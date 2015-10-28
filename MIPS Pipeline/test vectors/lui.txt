@@ -13,6 +13,6 @@
 #test case below
 addiu $1, $0, 0x5670
 lui $1, 0x1234
-movn $10, $1, 0xa
-movz $10, $1, 0xb
+#movn $10, $1, 0xa
+#movz $10, $1, 0xb
 
