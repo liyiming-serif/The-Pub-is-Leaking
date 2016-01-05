@@ -33,8 +33,8 @@ slt $2, $11, $0 #test slt
 sltu $2, $11, $0 #test sltu
 lui $12, 5 #test lui
 
-#Table B Instructions
-#j foo #test j
+#Table B Instructions; these should not change anything or cause data hazards
+j foo #test j
 jal bar #test jal
 jr $0 #test jr
 jalr $0 #test jalr
@@ -51,31 +51,14 @@ bltz $11, 8 #test bltz if true
 bltz $10, 8 #test bltz if false
 bgtz $4, 8 #test bgtz if true
 bgtz $10, 8 #test bgtz if false
-pop: #branching target
 lw $4, 0($16) #test lw
 lb $4, 0($16) #test lb
 lbu $4, 5($16) #test lbu
-bar: #jal target
 sw $4, 3($5) #test sw
 sb $4, 5($9) #test sb
 foo: #j target
-
-#test stalling and load-use hazard
-addiu $25, $0, 0x6666
-sw $25, 0($0)
-lw $24, 0($0)
-addiu $1, $24, 0 #$1 = 0x6666
-
-#test ID stage forwarding
-addiu $1, $0, 0
-addiu $2, $0, 0
-nop
-nop
-nop
-addiu $1, $0, 0x4444
-addiu $2, $0, 0x4443
-beq $2, $1, foo #expected: DO NOT TAKE THE BRANCH because inst grabbing most up to date value
-
+bar: #jal target
+pop: #branching target
 
 #forwarding
 addiu $1, $0, 1 #init values
