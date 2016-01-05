@@ -1,0 +1,53 @@
+prologue:
+addiu $sp, $sp, -28 #allocate frame
+sw $ra, 28($sp)
+sw $fp, 24($sp)
+sw $s0, 20($sp)
+sw $a3, 16($sp)
+sw $a2, 12($sp)
+sw $a1, 8($sp)
+sw $a0, 4($sp)
+addiu $fp, $sp, 28
+
+hailstone:
+mov $s0, $a0 # mov a0 to s0
+addiu $t0, $0, 1 #create a variable w/ val 1
+bne $t0, $s0, elseIf #branch if n!=1
+nop #delay slot
+addiu $v0, $0, 0 #if n=1 return 0 
+j epilogue #jump to epilogue
+nop
+
+elseIf:
+andi $t0, $s0, 1 #check if last digit of s0 or n is 1, if it is 1 then you have an odd number and need to branch
+bne $t0, $0, else #if not odd jump to else
+nop
+srl $a0, $a0, 1 #divide by 2 if still in this statement
+jal hailstone #jump back with new a value 
+nop
+addiu $v0, $v0, 1 #add 1 and jump back to epilogue from where you go back up to the past version
+j epilogue
+nop
+
+else:
+sll $t1, $s0, 2 #get n multiplied by 2
+add $a0, $t1, $a0 #get 3n from 2n(t1) + n(a0)
+addiu $a0, $a0, 1 #add 1 to it to get 3n+1
+jal hailstone #jump to the top again with a new value of n 
+nop
+addiu $v0, $v0, 1 #when you get back to here you will now increment by 1
+j epilogue #clean up and jump
+nop
+
+
+epilogue:
+lw $a0, 4($sp) #restore
+lw $a1, 8($sp) #restore
+lw $a2, 12($sp) #restore
+lw $a3, 16($sp) #restore
+lw $s0, 20($sp) #restore
+lw $fp, 24($sp) #restore old fp
+lw $ra, 28($sp) #restore $ra
+addiu $sp, $sp, 28 #dealloc frame
+jr $ra  #jump to register 31 which will lead you back to where you should go
+nop

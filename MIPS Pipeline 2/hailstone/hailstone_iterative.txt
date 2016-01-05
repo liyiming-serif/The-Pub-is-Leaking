@@ -1,0 +1,50 @@
+prologue:
+addiu $sp, $sp, -28 #allocate frame
+sw $ra, 28($sp)
+sw $fp, 24($sp)
+sw $s0, 20($sp)
+sw $a3, 16($sp)
+sw $a2, 12($sp)
+sw $a1, 8($sp)
+sw $a0, 4($sp)
+addiu $fp, $sp, 28
+
+hailstone:
+add $s0, $s0, 0 #set i to 0; s0 is i
+loop:
+addiu $t1, $0, 1 #create new temp var with value of 1
+beq $t1, $a0, exit #if n==1 then leave loop
+nop
+addiu $s0, $s0, 1 #i+1 
+andi $t2, $a0, 1 #create new variable where if a is odd you will have value 1, 0 if even
+bne $t2, $0, else #if not even then branch to else statement
+nop  
+srl $a0, $a0, 1 #make n/2 and store back to n
+j loop #jump to top
+nop
+
+
+
+else:
+sll $t3, $a0, 2 #shift a0 left 2 put into t3
+add $a0, $t3, $a0 #make it into 3n by doing n +2nwhere t3 is 2n
+addiu $a0, $a0, 1 #add 1 to it to get new value of 3n+1 for n
+j loop #jump to top and keep the calculation going
+nop
+
+exit:
+add v0, $0, $s0 #set the return variable to the final value of i
+j epilogue
+nop
+
+
+epilogue:
+lw $a0, 4($sp) #restore
+lw $a1, 8($sp) #restore
+lw $a2, 12($sp) #restore
+lw $a3, 16($sp) #restore
+lw $s0, 20($sp) #restore
+lw $fp, 24($sp) #restore old fp
+lw $ra, 28($sp) #restore $ra
+addiu $sp, $sp, 28 #dealloc frame
+jr $ra

@@ -1,18 +1,32 @@
 addiu $1, $0, 0x4444
-addiu $2, $0, 0x3
+addiu $2, $0, 0x4443
+
+#test branch
+beq $2, $1, bar
+
+#test jump
+#j foo #test j
+#jal bar #test jal
 nop
-nop
-nop
-nop
-sb $1, 1($0)
-nop
-nop
-nop
-nop
-lb $5, 1($0)
-#sw $1, 3($0)
+addiu $3, $0, 0x4444
+addiu $4, $0, 0x4444
+#jr $0 #test jr
+#jalr $0 #test jalr
+bar:
+addiu $5, $0, 0x3
+addiu $3, $0, 0xab
+
+#test mem
+#sb $3, 3($0)
+#lb $4, 3($0)
+#sb $1, 1($0)
+#lb $5, 1($0)
+#nop
+#sw $1, 4($0)
 #lw $1, 0($2)
-#lbu $1, 3($0)
+#nop
+
+nop
 #for mem, ALU out should have byte address
 #ask if current implementation will cause additional hazards
 #for ID branching and jumping, need forwarding logic from ex&mem to id. if data hazard, stall.

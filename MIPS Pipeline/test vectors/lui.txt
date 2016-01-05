@@ -1,3 +1,4 @@
+jalr $t4
 #andi, ori, xori not zero extending (fixed)
 #and $24, $1, $1
 
@@ -11,8 +12,8 @@
 
 #i/r instruction type confusion in movn, movz ()
 #test case below
-addiu $1, $0, 0x5670
-lui $1, 0x1234
+#addiu $1, $0, 0x5670
+#lui $1, 0x1234
 #movn $10, $1, 0xa
 #movz $10, $1, 0xb
 
